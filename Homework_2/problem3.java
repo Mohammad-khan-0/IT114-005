@@ -71,14 +71,9 @@ public class problem3 {
        else{
         output[j] = temp;
        }
-    
+        }
     }
-  
- }
-
-
-
-        //end edit section
+//end edit section
 
         StringBuilder sb = new StringBuilder();
         for(Object i : output){
