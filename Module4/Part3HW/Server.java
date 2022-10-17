@@ -64,6 +64,7 @@ public class Server {
             message = "Guess was correct! ->" + temp;
 
         message = String.format("user -> [%d]: %s", id, message);
+
         // end temp identifier
         
         // loop over clients and send out the message
