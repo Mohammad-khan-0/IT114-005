@@ -89,9 +89,14 @@ public class Room implements AutoCloseable {
 	 * @param message The original message being sent
 	 * @param client  The sender of the message (since they'll be the ones
 	 *                triggering the actions)
+	 * 
 	 */
+
+
+	
 	private boolean processCommands(String message, ServerThread client) {
 		boolean wasCommand = false;
+		
 		try {
 			if (message.startsWith(COMMAND_TRIGGER)) {
 				String[] comm = message.split(COMMAND_TRIGGER);
@@ -99,17 +104,18 @@ public class Room implements AutoCloseable {
 				String[] comm2 = part1.split(" ");
 				String command = comm2[0];
 				String roomName;
+				String clientName;
 				wasCommand = true;
 				switch (command) {
 					
-					case MUTE:
-						roomName = comm2[1];
-						client.addMute(roomName);
-						break;
-					case UNMUTE:
-						roomName = comm2[1];
-						client.unmute(roomName);
-						break;
+					//case MUTE:
+						//clientName = comm2[1];
+						//client.addMute(clientName);
+						//break;
+					//case UNMUTE:
+						//roomName = comm2[1];
+						//client.unmute(roomName);
+						//break;
 					
 						case CREATE_ROOM:
 						roomName = comm2[1];
@@ -124,6 +130,45 @@ public class Room implements AutoCloseable {
 					case LOGOFF:
 						Room.disconnectClient(client, this);
 						break;
+					
+					case MUTE:
+					clientName = comm2[1];
+					ServerThread MutedPerson;
+					if (!ServerThread.isMuted(clientName)) {
+						for (ServerThread cli : clients) {
+							if (cli.getClientName().equals(clientName)){
+									client.usernames.add(clientName);
+									MutedPerson = cli;
+									MutedPerson.sendMessage(1,"You were muted by " + client.getClientName());
+									sendMessage(client,"Muted " + clientName);
+									
+								}
+							}
+						}
+						wasCommand = true;
+						break;
+
+
+					case UNMUTE:
+					clientName = comm2[1];
+					ServerThread UnMutedPerson;
+					if (ServerThread.isMuted(clientName)) {
+						for(ServerThread cli : clients) {
+							if (cli.getClientName().equals(clientName)){
+							client.usernames.remove(clientName);
+							UnMutedPerson = cli;
+						//UnMutedPerson.send("Mute Daemon: ", "You were Unmuted by " + client.getClientName());
+						UnMutedPerson.sendMessage(0,"You were muted by " + client.getClientName());
+							sendMessage(client,"unMuted " + clientName);
+					}
+				}
+			}
+			wasCommand = true;
+			break;
+					 
+
+
+
 					default:
 						wasCommand = false;
 						break;
@@ -133,7 +178,7 @@ public class Room implements AutoCloseable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		//roll dice from 1-10 
+		//roll dice from 1-10 //mtk22
 		int min = 1;
 		int max = 10;
 		if (message.equalsIgnoreCase("roll")) {
@@ -142,16 +187,16 @@ public class Room implements AutoCloseable {
 			return true;
         }
 		
-		//flip coin
+		//flip coin //mtk22
 		if (message.equalsIgnoreCase("flip")) {
             sendMessage(client,"Flipped a coin and got " + (Math.random() > .5 ? "HEADS" : "TAILS"));
             return true;
         }
-		
+
 		//bold
 		if(message.startsWith("@") && message.endsWith("@")){
 			String Bold = message.substring(1,message.length() -1);//length of string from start to finsih 
-			String boldMessage = "<b>" + Bold + "</b>";
+			String boldMessage ="<b>" + Bold + "</b>";
 			sendMessage(client, boldMessage);
 		}
 		
@@ -178,6 +223,7 @@ public class Room implements AutoCloseable {
 		}
 
 
+		
 
 		return wasCommand;
 	}
@@ -301,9 +347,12 @@ public class Room implements AutoCloseable {
 		// sendMessage(null, client.getClientName() + " disconnected");
 	}
 
+	
+
 	public void close() {
 		Server.INSTANCE.removeRoom(this);
 		isRunning = false;
 		clients = null;
 	}
+
 }
