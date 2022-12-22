@@ -79,7 +79,7 @@ public class ChatPanel extends JPanel {
             pw.close();
             }
 
-            */
+          */  
 
         // lets us submit with the enter key instead of just the button click
         textValue.addKeyListener(new KeyListener() {
