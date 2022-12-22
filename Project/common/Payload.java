@@ -68,6 +68,16 @@ public class Payload implements Serializable {
         this.number = number;
     }
 
+    private boolean mute;
+
+    public void setMuted(boolean mute) {
+    	this.mute = mute;
+    }
+
+    public boolean getMuted() {
+    	return mute;
+    }
+
     @Override
     public String toString() {
         return String.format("ClientId[%s], ClientName[%s], Type[%s], Number[%s], Message[%s]", getClientId(),
