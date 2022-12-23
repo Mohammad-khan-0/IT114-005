@@ -139,7 +139,7 @@ public class Room implements AutoCloseable {
 							if (cli.getClientName().equals(clientName)){
 									client.usernames.add(clientName);
 									MutedPerson = cli;
-									MutedPerson.sendMessage(1,"You were muted by " + client.getClientName());
+									MutedPerson.sendMessage(0,"You were muted by " + client.getClientName());
 									sendMessage(client,"Muted " + clientName);
 									
 								}
