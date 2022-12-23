@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import client.Client;
+import common.Constants;
 import common.Payload;
 import common.PayloadType;
 import common.RoomResultPayload;
@@ -215,9 +217,9 @@ public class ServerThread extends Thread {
             case JOIN_ROOM:
                 Room.joinRoom(p.getMessage().trim(), this);
                 break;
-            case MUTE:
-                muteList.add(clientName);
-                break;
+            //case MUTE:
+                //muteList.add(clientName);
+                //break;
             default:
                 break;
 
@@ -236,27 +238,25 @@ public class ServerThread extends Thread {
     }
 
     //server, mute, check
-    private List<String> muteList = new ArrayList<String>();
+     
+    public static List<String> usernames = new ArrayList<String>();
     
-
-    public boolean addMute (String mute){
-        
-        muteList.add(mute);
-        //roomName == false;
-       return muteList.contains(mute);
+    public static boolean isMuted(String clientName) {
+    	return usernames.contains(clientName);
     }
 
-    
-    public boolean unmute (String unmute){
+    /* 
+    public boolean addMute(String mute){
+        mutedPeople.add(mute);  
 
-        muteList.remove(unmute);
-        return muteList.contains(unmute);
+        return mutedPeople.contains(mute);
     }
+*/
+  
 
-    
-    public boolean check (String check){
 
-        muteList.contains(check);
-        return muteList.contains(check);
-    }
+
+
+
+
 }
